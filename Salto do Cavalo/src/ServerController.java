@@ -55,6 +55,7 @@ public class ServerController {
         }
     }
 
+
     public void log(String message) {
         Platform.runLater(() -> {
             logArea.appendText(message + "\n");
