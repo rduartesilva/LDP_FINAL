@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+    <top>
+        <Label text="Salto do Cavalo" BorderPane.alignment="CENTER" />
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="10" padding="10">
+            <GridPane fx:id="boardGrid" prefHeight="400.0" prefWidth="400.0">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="20"/>
+                    <ColumnConstraints percentWidth="20"/>
+                    <ColumnConstraints percentWidth="20"/>
+                    <ColumnConstraints percentWidth="20"/>
+                    <ColumnConstraints percentWidth="20"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints percentHeight="20"/>
+                    <RowConstraints percentHeight="20"/>
+                    <RowConstraints percentHeight="20"/>
+                    <RowConstraints percentHeight="20"/>
+                    <RowConstraints percentHeight="20"/>
+                </rowConstraints>
+            </GridPane>
+
+            <VBox spacing="5">
+                <TextField fx:id="chatInput" promptText="Type your message..." />
+                <Button text="Send" onAction="#onSendChat" />
+                <TextArea fx:id="chatLog" editable="false" prefRowCount="4" wrapText="true" />
+            </VBox>
+        </VBox>
+    </center>
+
+    <right>
+        <VBox alignment="TOP_CENTER" spacing="10" padding="10">
+            <Label text="Jogador atual:" />
+            <Label fx:id="currentPlayerLabel" text="Nome" />
+            <Button text="Recomeçar" />
+        </VBox>
+    </right>
+</BorderPane>
