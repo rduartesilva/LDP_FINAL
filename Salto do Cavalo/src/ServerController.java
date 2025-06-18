@@ -22,6 +22,7 @@ public class ServerController {
         Platform.runLater(() -> clientCountLabel.setText(String.valueOf(count)));
     }
 
+
     public void log(String message) {
         Platform.runLater(() -> {
             logArea.appendText(message + "\n");
