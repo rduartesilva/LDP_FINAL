@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+        "type": "java",
+        "name": "ClientMain",
+        "request": "launch",
+        "mainClass": "ClientMain",
+        "projectName": "LDP_FINAL_33aee397",
+        "vmArgs": "--module-path \"C:/Users/User/Desktop/javafx-sdk-21.0.7/lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+        {
             "type": "java",
             "name": "GameClient",
             "request": "launch",

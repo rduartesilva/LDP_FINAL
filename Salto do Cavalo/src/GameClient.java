@@ -1,60 +1,53 @@
 import java.io.*;
 import java.net.*;
-import java.util.Scanner;
 
 public class GameClient {
-    private static final String SERVER_ADDRESS = "localhost";
-    private static final int SERVER_PORT = 1234;
-
     private Socket socket;
     private DataInputStream input;
     private DataOutputStream output;
+    private GameClientListener listener;
 
-    public static void main(String[] args) {
-        new GameClient().startClient();
-    }
+    public void startClient(GameClientListener listener) {
+        this.listener = listener;
 
-    public void startClient() {
         try {
-            socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+            socket = new Socket("localhost", 1234);
             input = new DataInputStream(socket.getInputStream());
             output = new DataOutputStream(socket.getOutputStream());
 
-            System.out.println("Connected to server at " + SERVER_ADDRESS + ":" + SERVER_PORT);
+            System.out.println("[Client] Connected to server.");
 
-            // Thread to listen for server messages
             Thread readThread = new Thread(() -> {
                 try {
                     while (true) {
-                        String serverMessage = input.readUTF();
-                        System.out.println("Server: " + serverMessage);
+                        String message = input.readUTF();
+                        System.out.println("[Client] Received: " + message);
+                        if (listener != null) {
+                            listener.onMessageReceived(message);
+                        }
                     }
                 } catch (IOException e) {
-                    System.out.println("Disconnected from server.");
+                    System.out.println("[Client] Connection lost or error: " + e.getMessage());
                 }
             });
+
             readThread.setDaemon(true);
             readThread.start();
 
-            // Send moves to the server manually (for testing)
-            Scanner scanner = new Scanner(System.in);
-            while (true) {
-                String message = scanner.nextLine();
-                output.writeUTF(message);
-                if (message.equalsIgnoreCase("logout")) break;
-            }
-
-            socket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("[Client] Error connecting to server: " + e.getMessage());
         }
     }
 
-    public void sendMove(String move) {
+    public void sendMove(int row, int col) {
+        sendMessage(row + "," + col);
+    }
+
+    public void sendMessage(String msg) {
         try {
-            output.writeUTF(move);
+            output.writeUTF(msg);
         } catch (IOException e) {
-            System.err.println("Failed to send move: " + move);
+            System.err.println("[Client] Failed to send message: " + e.getMessage());
         }
     }
 }

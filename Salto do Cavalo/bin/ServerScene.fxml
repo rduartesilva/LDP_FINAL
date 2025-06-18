@@ -19,7 +19,6 @@
          </font>
       </Label>
       <Button fx:id="startServerButton" mnemonicParsing="false" onAction="#onStartServer" text="Iniciar Servidor" />
-      <Button fx:id="startGameButton" mnemonicParsing="false" onAction="#onStartGame" text="Começar jogo" />
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
             <Label text="Clientes Conectados:" />
