@@ -1,8 +1,10 @@
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -13,6 +15,8 @@ public class Controller {
     @FXML private GridPane boardGrid;
     @FXML private Label currentPlayerLabel;
     @FXML private Button restartButton;
+    @FXML private TextField chatInput;
+    @FXML private TextArea chatLog;
 
     private Stage mainWindow;
     private final int SIZE = 5;
@@ -42,11 +46,16 @@ public class Controller {
         this.currentHorse = h1;
     }
 
-    @FXML
-    public void initialize() {
-        createBoard();
+    private final GameClient client = new GameClient();  // no @FXML here
+
+    public void startGameClient() {
+        client.startClient(new GameClientListener() {
+            @Override
+            public void onMessageReceived(String message) {
+                Platform.runLater(() -> handleOpponentMove(message));
+            }
+        });
     }
-    
     
     private void updateCurrentPlayerDisplay(Player player) {
         currentPlayerLabel.setText("Jogador atual: " + player.getName());
@@ -60,7 +69,7 @@ public class Controller {
                 Button btn = new Button();
 
                 // Set square shape and remove spacing
-                btn.setPrefSize(100, 100); // adjust size as needed
+                btn.setPrefSize(100, 100);
                 btn.setMinSize(100, 100);
                 btn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
@@ -74,7 +83,7 @@ public class Controller {
                     "-fx-border-width: 0;" +
                     "-fx-border-color: transparent;" +
                     "-fx-background-color: " +
-                    ((row + col) % 2 == 0 ? "#f0d9b5" : "#b58863") // chess style
+                    ((row + col) % 2 == 0 ? "#f0d9b5" : "#b58863")
                 );
 
                 boardGrid.add(btn, col, row);
@@ -87,5 +96,33 @@ public class Controller {
     void onBtnClick(ActionEvent event) {
         String title = tfName.getText();
         mainWindow.setTitle(title);
+    }
+
+    public void handleOpponentMove(String message) {
+        if (message.startsWith("CHAT:")) {
+            String chatMessage = message.substring(5);
+            appendChat("Oponente: " + chatMessage);
+            return;
+        }
+
+        String[] parts = message.split(",");
+        int row = Integer.parseInt(parts[0]);
+        int col = Integer.parseInt(parts[1]);
+        boardButtons[row][col].setText("♞");
+        boardButtons[row][col].setDisable(true);
+    }
+
+    @FXML
+    public void onSendChat() {
+        String message = chatInput.getText().trim();
+        if (!message.isEmpty()) {
+            client.sendMessage("CHAT:" + message);  // send with prefix
+            appendChat("Você: " + message);
+            chatInput.clear();
+        }
+    }
+
+    private void appendChat(String message) {
+        chatLog.appendText(message + "\n");
     }
 }
