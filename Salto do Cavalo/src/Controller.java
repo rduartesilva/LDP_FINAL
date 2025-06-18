@@ -1,11 +1,15 @@
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
+
 
 import java.util.List;
 
@@ -15,6 +19,8 @@ public class Controller {
     private GridPane boardGrid;
     @FXML
     private Label currentPlayerLabel;
+    @FXML private TextField chatInput;
+    @FXML private TextArea chatLog;
 
     private Stage mainWindow;
     private final int SIZE = 5;
@@ -26,6 +32,8 @@ public class Controller {
     private Horse horse2;
     private Player currentPlayer;
     private Horse currentHorse;
+    private boolean isMyTurn = true;
+    private String playerRole; 
 
     private boolean selectingMove = false;
     private List<int[]> possibleMoves;
@@ -45,12 +53,71 @@ public class Controller {
         this.horse1 = h1;
         this.horse2 = h2;
         this.currentHorse = null;
-        updateBoard(); // No horse selected at start
+
+        if (boardButtons[0][0] == null) {
+            createBoard(); // ensure it's ready
+        }
+
+        updateBoard();
     }
 
     @FXML
     public void initialize() {
         createBoard();
+    }
+
+    private final GameClient client = new GameClient(); 
+
+    public void startGameClient() {
+        client.startClient(new GameClientListener() {
+            @Override
+            public void onMessageReceived(String message) {
+                Platform.runLater(() -> handleOpponentMove(message));
+            }
+        });
+        createBoard();
+    }
+
+    public void handleOpponentMove(String message) {
+        if (message.startsWith("CHAT:")) {
+            String chatMessage = message.substring(5);
+            appendChat("Oponente: " + chatMessage);
+            return;
+        }
+
+        if (message.startsWith("START ")) {
+            this.playerRole = message.substring(6); // "P1" or "P2"
+            this.isMyTurn = playerRole.equals("P1"); // P1 starts
+            return;
+        }
+
+        if (message.startsWith("MOVE:")) {
+            String[] coords = message.substring(5).split(",");
+            int row = Integer.parseInt(coords[0]);
+            int col = Integer.parseInt(coords[1]);
+
+            // 🧠 Use the opponent's horse!
+            Horse opponentHorse = playerRole.equals("P1") ? horse2 : horse1;
+            opponentHorse.moveTo(row, col);
+            updateBoard();
+            togglePlayer();
+            updateCurrentPlayerDisplay();
+            isMyTurn = true;
+        }
+    }
+
+    @FXML
+    public void onSendChat() {
+        String message = chatInput.getText().trim();
+        if (!message.isEmpty()) {
+            client.sendMessage("CHAT:" + message);
+            appendChat("Você: " + message);
+            chatInput.clear();
+        }
+    }
+
+    private void appendChat(String message) {
+        chatLog.appendText(message + "\n");
     }
 
     private void updateCurrentPlayerDisplay() {
@@ -98,10 +165,17 @@ public class Controller {
         }
     }
 
+    private boolean isMyHorse(Horse horse) {
+        return (playerRole.equals("P1") && horse == horse1)
+            || (playerRole.equals("P2") && horse == horse2);
+    }
+
     private void onCellClicked(int row, int col) {
+        if (!isMyTurn) return;
+
         if (!selectingMove) {
             Horse horse = getHorseAtPosition(row, col);
-            if (horse != null && isCurrentPlayersHorse(horse)) {
+            if (horse != null && isMyHorse(horse)) {
                 currentHorse = horse;
                 boolean[][] blocked = getBlockedCells();
                 possibleMoves = horse.getPossibleMoves(SIZE, blocked);
@@ -123,9 +197,11 @@ public class Controller {
                 selectingMove = false;
                 currentHorse = null;
 
+                client.sendMessage("MOVE:" + row + "," + col);
                 togglePlayer();
                 updateCurrentPlayerDisplay();
                 updateBoard();
+                isMyTurn = false;
             } else {
                 flashInvalidMove(row, col);
             }
