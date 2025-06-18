@@ -10,6 +10,12 @@ public class GameServer {
     private final List<ClientHandler> clients = new ArrayList<>();
     private final ServerController ui;
 
+    private Runnable onGameStart;
+
+    public void setOnGameStart(Runnable callback) {
+        this.onGameStart = callback;
+    }
+
     public GameServer(ServerController ui) {
         this.ui = ui;
     }
@@ -39,6 +45,10 @@ public class GameServer {
 
             clients.get(0).sendMessage("START P1");
             clients.get(1).sendMessage("START P2");
+
+            if (onGameStart != null) {
+                Platform.runLater(onGameStart);
+            }
 
         } catch (IOException e) {
             log("[Server Error] " + e.getMessage());
