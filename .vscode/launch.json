@@ -9,22 +9,19 @@
         "name": "ClientMain",
         "request": "launch",
         "mainClass": "ClientMain",
-        "projectName": "LDP_FINAL_33aee397",
-        "vmArgs": "--module-path \"C:/Users/User/Desktop/javafx-sdk-21.0.7/lib\" --add-modules javafx.controls,javafx.fxml"
+        "vmArgs": "--module-path \"C:/javafx-sdk-21.0.7/lib\" --add-modules javafx.controls,javafx.fxml"
         },
         {
             "type": "java",
             "name": "GameClient",
             "request": "launch",
-            "mainClass": "GameClient",
-            "projectName": "LDP_FINAL_33aee397"
+            "mainClass": "GameClient"
         },
         {
             "type": "java",
             "name": "GameServer",
             "request": "launch",
-            "mainClass": "GameServer",
-            "projectName": "LDP_FINAL_33aee397"
+            "mainClass": "GameServer"
         },
         {
             "type": "java",
@@ -37,8 +34,7 @@
             "name": "Main",
             "request": "launch",
             "mainClass": "Main",
-            "projectName": "LDP_FINAL_33aee397",
-            "vmArgs": "--module-path \"C:/Users/User/Desktop/javafx-sdk-21.0.7/lib\" --add-modules javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path \"C:/javafx-sdk-21.0.7/lib\" --add-modules javafx.controls,javafx.fxml"
         }
     ]
 }

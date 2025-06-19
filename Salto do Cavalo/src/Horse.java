@@ -63,4 +63,9 @@ public class Horse {
 
         return validMoves;
     }
+
+    public void setPosition(int i, int j) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setPosition'");
+    }
 }

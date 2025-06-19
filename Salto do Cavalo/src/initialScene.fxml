@@ -12,66 +12,82 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="605.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
-   <children>
-      <Label contentDisplay="CENTER" layoutX="259.0" layoutY="6.0" text="Salto do Cavalo" />
-      <VBox alignment="CENTER" prefHeight="580.0" prefWidth="605.0">
-         <children>
-         <HBox prefHeight="506.0" prefWidth="605.0" spacing="10">
-               <children>
-                  <VBox prefHeight="205.0" prefWidth="789.0">
-                     <children>
-                        <GridPane fx:id="boardGrid" alignment="TOP_CENTER" prefHeight="347.0" prefWidth="495.0" VBox.vgrow="ALWAYS">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="623.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+
+    <children>
+        <Label contentDisplay="CENTER" layoutX="259.0" layoutY="6.0" text="Salto do Cavalo" />
+
+        <VBox alignment="CENTER" prefHeight="580.0" prefWidth="606.0" spacing="10">
+
+            <children>
+                    <!-- Label da ronda adicionada aqui -->
+                    <Label fx:id="roundLabel" text="Ronda: 1" />
+
+                <HBox prefHeight="450.0" prefWidth="596.0" spacing="10">
+
+                    <children>
+
+                                    <VBox alignment="TOP_CENTER" prefHeight="205.0" prefWidth="789.0" spacing="5">
+
+                                        <children>
+
+                                            <GridPane fx:id="boardGrid" alignment="TOP_CENTER" prefHeight="209.0" prefWidth="320.0" VBox.vgrow="ALWAYS">
+
+                                                <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    </columnConstraints>
+
+                                                <rowConstraints>
+                                        <RowConstraints />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <padding>
-                              <Insets top="50.0" />
-                           </padding>
-                        </GridPane>
-                     <TextField fx:id="chatInput" alignment="BOTTOM_LEFT" promptText="Type your message...">
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
-                        </TextField>
-                     <Button onAction="#onSendChat" text="Send" />
-                     <TextArea fx:id="chatLog" editable="false" prefHeight="100" wrapText="true" />
-                     </children>
-                  </VBox>
-                  <HBox prefHeight="0.0" prefWidth="523.0">
-                     <children>
-                        <VBox prefHeight="456.0" prefWidth="167.0">
-                           <children>
-                              <Label fx:id="currentPlayerLabel" prefHeight="17.0" prefWidth="185.0" text="Nome" />
-                           </children>
+                                    </rowConstraints>
+
+                                            </GridPane>
+
+                                            <TextField fx:id="chatInput" alignment="BOTTOM_LEFT" promptText="Type your message...">
+                                    <VBox.margin>
+                                        <Insets top="20.0" />
+                                    </VBox.margin>
+                                </TextField>
+
+                                            <Button onAction="#onSendChat" text="Send" />
+
+                                            <TextArea fx:id="chatLog" editable="false" prefHeight="100.0" wrapText="true" />
+
+                                        </children>
                         </VBox>
-                     </children>
-                     <padding>
-                        <Insets top="50.0" />
-                     </padding>
-                  </HBox>
-               </children>
-               <VBox.margin>
-                  <Insets left="10.0" />
-               </VBox.margin>
-            </HBox>
-            <Button contentDisplay="CENTER" mnemonicParsing="false" text="Recomeçar Jogo">
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </Button>
-         </children>
-      </VBox>
-   </children>
+
+                        <HBox prefHeight="506.0" prefWidth="734.0">
+                            <children>
+                                <VBox prefHeight="456.0" prefWidth="266.0">
+                                    <children>
+                                        <Label fx:id="currentPlayerLabel" prefHeight="17.0" prefWidth="185.0" text="Nome" />
+                                        <TextArea fx:id="moveLog" editable="false" prefHeight="250.0" prefWidth="266.0" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+
+                    </children>
+
+                    <VBox.margin>
+                        <Insets left="10.0" />
+                    </VBox.margin>
+
+                </HBox>
+
+               <Button text="Recomeçar" onAction="#onRestartGame" />
+
+
+            </children>
+        </VBox>
+    </children>
 </AnchorPane>
